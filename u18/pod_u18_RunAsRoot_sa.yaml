@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: par-sa-a
+
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: par-role-a
+rules:
+  - apiGroups: ["security.openshift.io"]
+    resources: ["securitycontextconstraints"]
+    resourceNames: ["privileged"]
+    verbs: ["use"]
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: par-rolebinding-a
+subjects:
+  - kind: ServiceAccount
+    name: par-sa-a
+roleRef:
+  kind: Role
+  name: par-role-a
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: u18-runasroot-sa
+spec:
+  containers:
+  - name: u18
+    image: quay.io/jackluxm/u18
+    command: ["/bin/sleep", "3650d"]
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      runAsUser: 0
+  serviceAccountName: par-sa-a
+
