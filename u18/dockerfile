@@ -1,7 +1,7 @@
 # Base image
 FROM ubuntu:18.04
 
-ENV pkg="net-tools curl iproute2 inetutils-ping openssh-client telnet lsof tree dnsutils htop ncdu fio w3m vim"
+ENV pkg="net-tools curl iproute2 inetutils-ping openssh-client telnet lsof tree dnsutils htop ncdu w3m vim"
 
 # Install.
 RUN apt-get update
