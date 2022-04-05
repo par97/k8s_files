@@ -1,1 +1,1 @@
-docker build -t quay.io/jackluxm/kubia .
+docker build -t quay.io/jackluxm/u18 .
