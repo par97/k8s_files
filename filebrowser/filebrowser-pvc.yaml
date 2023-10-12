@@ -1,13 +1,7 @@
-kind: Project
-apiVersion: project.openshift.io/v1
-metadata:
-  name: testfb-dhanashree
-
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dh-filebrowser-pvc
+  name: filebrowser-pvc
 spec:
   accessModes:
   - ReadWriteOnce
@@ -24,20 +18,21 @@ metadata:
     app: file-browser
 spec:
   imagePullSecrets:
-   - name: regcred
+  - name: regcred
   containers:
-   - name: file-browser-container
-     image: quay.io/smitaraut/filebrowser:latest
-     volumeMounts:
-       - name: mypvc
-         mountPath: /srv
-     ports:
-     - containerPort: 80
+  - name: file-browser-container
+    #image: quay.io/smitaraut/filebrowser:latest
+    image: quay.io/jackluxm/filebrowser
+    volumeMounts:
+      - name: filebrowser-pvc
+        mountPath: /srv
+    ports:
+    - containerPort: 80
   volumes:
-   - name: mypvc
-     persistentVolumeClaim:
-       claimName: dh-filebrowser-pvc
-       readOnly: false
+  - name: filebrowser-pvc
+    persistentVolumeClaim:
+      claimName: filebrowser-pvc
+      # readOnly: false
 ---
 apiVersion: v1
 kind: Service
