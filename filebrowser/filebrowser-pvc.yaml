@@ -13,14 +13,14 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: file-browser-pod
+  name: filebrowser-pod
   labels:
-    app: file-browser
+    app: filebrowser
 spec:
   imagePullSecrets:
   - name: regcred
   containers:
-  - name: file-browser-container
+  - name: filebrowser-container
     #image: quay.io/smitaraut/filebrowser:latest
     image: quay.io/jackluxm/filebrowser
     volumeMounts:
@@ -37,10 +37,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: file-browser
+  name: filebrowser
 spec:
   selector:
-    app: file-browser
+    app: filebrowser
   ports:
     - protocol: TCP
       port: 80
