@@ -1,47 +1,71 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: filebrowser
+
+---
+
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: filebrowser-pvc
+  name: filebrowser
+  namespace: filebrowser
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ocs-storagecluster-ceph-rbd
+#  storageClassName: ocs-storagecluster-ceph-rbd
+
 ---
+
 apiVersion: v1
 kind: Pod
 metadata:
-  name: filebrowser-pod
+  name: filebrowser
+  namespace: filebrowser
   labels:
     app: filebrowser
 spec:
-  imagePullSecrets:
-  - name: regcred
   containers:
-  - name: filebrowser-container
-    #image: quay.io/smitaraut/filebrowser:latest
+  - name: filebrowser
     image: quay.io/jackluxm/filebrowser
     volumeMounts:
-      - name: filebrowser-pvc
+      - name: filebrowser
         mountPath: /srv
     ports:
     - containerPort: 80
   volumes:
-  - name: filebrowser-pvc
+  - name: filebrowser
     persistentVolumeClaim:
-      claimName: filebrowser-pvc
-      # readOnly: false
+      claimName: filebrowser
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
   name: filebrowser
+  namespace: filebrowser
 spec:
   selector:
     app: filebrowser
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+  - port: 80
+    targetPort: 80
+
+---
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: filebrowser
+  namespace: filebrowser
+spec:
+  path: /
+  to:
+    kind: Service
+    name: filebrowser
+  port:
+    targetPort: 80

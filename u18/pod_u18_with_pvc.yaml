@@ -1,7 +1,15 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: u18-with-pvc
+
+---
+
+apiVersion: v1
 kind: Pod
 metadata:
   name: u18-with-pvc
+  namespace: u18-with-pvc
 spec:
   volumes:
     - name: u18vol
@@ -16,3 +24,18 @@ spec:
         - mountPath: "/u18vol_mount"
           name: u18vol
 
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: u18vol 
+  namespace: u18-with-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem
+  #storageClassName: ocs-storagecluster-ceph-rbd

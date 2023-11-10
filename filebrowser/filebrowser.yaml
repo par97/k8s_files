@@ -1,7 +1,15 @@
-kind: Pod
 apiVersion: v1
+kind: Namespace
 metadata:
   name: filebrowser
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: filebrowser
+  namespace: filebrowser
   labels:
     app: filebrowser
 spec:
@@ -11,15 +19,15 @@ spec:
 
 ---
 
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: filebrowser
+  namespace: filebrowser
 spec:
   selector:
     app: filebrowser
   ports:
-  # Default port used by the image
   - port: 80
     targetPort: 80
 
